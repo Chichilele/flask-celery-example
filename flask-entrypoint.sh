@@ -1,1 +1,3 @@
-myvenv/bin/python app.py
+#!/bin/bash
+. myenv/bin/activate && \
+    python app.py
