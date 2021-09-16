@@ -1,0 +1,40 @@
+version: "3.8"
+
+services:
+  backend:
+    build:
+      context: ./
+      dockerfile: ./Dockerfile
+    entrypoint:
+      - "./flask-entrypoint.sh"
+    volumes:
+      - ./flask-entrypoint.sh:/code/flask-entrypoint.sh
+
+  celery_worker:
+    build:
+      context: ./
+      dockerfile: ./Dockerfile
+    entrypoint:
+      - "./celery-worker-entrypoint.sh"
+    volumes:
+      - ./celery-worker-entrypoint.sh:/code/celery-worker-entrypoint.sh
+
+  redis:
+    image: redis:3.2-alpine
+    command: redis-server
+
+  front_nginx:
+    image: nginx:latest
+    ports:
+      - "80:80"
+    depends_on:
+      - nginx
+    volumes:
+      - ./nginx/front_nginx.conf:/etc/nginx/conf.d/default.conf/
+
+  nginx:
+    image: nginx:latest
+    depends_on:
+      - backend
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/conf.d/default.conf/
