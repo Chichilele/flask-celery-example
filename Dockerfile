@@ -1,6 +1,7 @@
 FROM python
 
-COPY templates app.py requirements.txt run-redis.sh /code/
+COPY templates/ /code/templates/
+COPY app.py requirements.txt run-redis.sh /code/
 WORKDIR /code
 RUN python -m venv myenv && \
     . myenv/bin/activate && \
